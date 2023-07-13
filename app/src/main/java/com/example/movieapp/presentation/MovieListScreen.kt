@@ -1,10 +1,12 @@
 package com.example.movieapp.presentation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
@@ -38,26 +41,22 @@ fun MovieListScreen(movieViewModel: MovieViewModel = hiltViewModel()) {
     }
 
     Box(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        LazyColumn {
+        LazyColumn(verticalArrangement = Arrangement.SpaceEvenly) {
             items(movieState.data.size) {
-                Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+                Row {
                     AsyncImage(
                         model = movieState.data[it].posterLink ?: "",
                         contentDescription = null,
                         modifier = Modifier
-                            .height(200.dp)
-                            .width(200.dp)
+                            .height(150.dp)
+                            .width(150.dp)
                             .padding(bottom = 2.dp),
                     )
-                    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)
+                    Column(modifier = Modifier.fillMaxWidth().height(150.dp).padding(16.dp)
                         , verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.Start) {
-                        Spacer(modifier = Modifier.padding(4.dp))
                         Text(text = movieState.data[it].name)
-                        Spacer(modifier = Modifier.padding(4.dp))
                         Text(text = movieState.data[it].year)
-                        Spacer(modifier = Modifier.padding(4.dp))
                         Text(text = movieState.data[it].runtimeInHr)
-                        Spacer(modifier = Modifier.padding(4.dp))
                     }
 
                 }

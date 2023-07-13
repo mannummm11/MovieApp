@@ -16,6 +16,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,19 +32,21 @@ class MovieViewModel @Inject constructor(
     }
 
      fun getMovieData() {
-        movieDataUseCase.getMovieData().onEach {
-            delay(3000)
-            when(it) {
-                is Resource.Success -> {
-                    it.data?.let { data-> _movieState.value = MovieState(data = data) }
-                }
-                is Resource.Error -> {
-                    _movieState.value = MovieState(error = it.error.toString())
-                }
-                is Resource.IsLoading -> {
-                    _movieState.value = MovieState(isLoading = true)
-                }
-            }
-        }.launchIn(viewModelScope)
+         viewModelScope.launch {
+             movieDataUseCase.getMovieData().onEach {
+                 delay(3000)
+                 when(it) {
+                     is Resource.Success -> {
+                         it.data?.let { data-> _movieState.value = MovieState(data = data) }
+                     }
+                     is Resource.Error -> {
+                         _movieState.value = MovieState(error = it.error.toString())
+                     }
+                     is Resource.IsLoading -> {
+                         _movieState.value = MovieState(isLoading = true)
+                     }
+                 }
+             }.launchIn(viewModelScope)
+         }
     }
 }
